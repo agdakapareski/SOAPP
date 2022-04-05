@@ -11,13 +11,8 @@ import 'model/item_count_model.dart';
 //   Item(kodeItem: 'MI-005', namaItem: 'Mie Instan', saldoItem: 88),
 // ];
 
-/// list untuk menyimpan sesi
-List<Sesi> sessions = [];
 
 /// list untuk menyimpan master data dari csv
 List<Item> data = [];
 
-/// list untuk menyimpan data yang akan dihitung atau sudah dihitung
-List<ItemCount> itemCounts = [];
 
-List<ItemCount> itemCountsForDisplay = [];

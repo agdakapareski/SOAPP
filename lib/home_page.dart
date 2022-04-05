@@ -57,8 +57,8 @@ class _HomePageState extends State<HomePage> {
           const CsvToListConverter(eol: '\n'),
         )
         .toList();
-    print(master);
-    print(master.length);
+    // print(master);
+    // print(master.length);
 
     /// menghapus index yang memuat header
     /// [
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
     master.removeAt(0);
     master.join(',');
 
-    print(master);
+    // print(master);
 
     /// convert list 2 dimensi menjadi list Item
     /// semula =  [
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
         data.add(a);
       });
     }
-    print(data[0].carton.runtimeType);
+    // print(data[0].carton.runtimeType);
   }
 
   @override

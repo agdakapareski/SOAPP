@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:soapp/database.dart';
 import 'package:soapp/model/item_count_model.dart';
 import 'package:soapp/stock_count_page.dart';
 import 'package:soapp/tab_screen.dart';
@@ -29,51 +30,74 @@ class _InputSessionPageState extends State<InputSessionPage> {
   TextEditingController picController = TextEditingController();
   TextEditingController idController = TextEditingController();
 
-  inputSession() {
+  /// list untuk menyimpan data yang akan dihitung atau sudah dihitung
+  List<ItemCount> itemCounts = [];
+
+  List<ItemCount> itemCountsForDisplay = [];
+
+  inputSession() async {
     Sesi sesi = Sesi(
-      idSesi: idController.text,
-      PIC: picController.text,
+      kodeSesi: idController.text,
+      pic: picController.text,
       tanggal: tanggalController.text,
     );
+
+    int idS = 0;
+    idS = await Db().saveSesi(sesi);
+
+    // Sesi s = Sesi(
+    //     id: sesi.id,
+    //     kodeSesi: sesi.kodeSesi,
+    //     pic: sesi.pic,
+    //     tanggal: sesi.tanggal);
+
     setState(() {
-      sessions.add(sesi);
-      for (var d in data) {
-        ItemCount itemCount = ItemCount(
-          kodeItem: d.kodeItem,
-          namaItem: d.namaItem,
-          idSesi: idController.text,
-          carton: d.carton,
-          box: d.box,
-          unit: d.unit,
-          saldoItem: d.saldoItem,
-          hitung: 0,
-          selisih: 0 - d.saldoItem!,
-        );
+      // sessions.add(sesi);
 
-        itemCounts.add(itemCount);
-      }
 
-      itemCountsForDisplay = itemCounts;
+      List<ItemCount> createItemCounts = [];
+        for (var d in data) {
+          ItemCount itemCount = ItemCount(
+            idSesi: idS,
+            kodeItem: d.kodeItem,
+            namaItem: d.namaItem,
+            kodeSesi: idController.text,
+            carton: d.carton,
+            box: d.box,
+            unit: d.unit,
+            saldoItem: d.saldoItem,
+            hitung: 0,
+            selisih: 0 - d.saldoItem!,
+          );
+          createItemCounts.add(itemCount);
+        }
+
+      Db().saveItemCounts(createItemCounts);
 
       Route route = MaterialPageRoute(
-        builder: (context) => StockCountPage(idController.text,
+        builder: (context) => StockCountPage(sesi.id, idController.text,
             tanggalController.text, picController.text),
       );
       Navigator.pushReplacement(context, route);
+
     });
   }
 
   @override
   void initState() {
-    // TODO: implement initState
-    const _chars = '1234567890';
-    Random _rnd = Random.secure();
+    // const _chars = '1234567890';
+    // Random _rnd = Random.secure();
+    //
+    // String getRandomString(int length) =>
+    //     String.fromCharCodes(Iterable.generate(
+    //         length,
+    //         (_) => _chars.codeUnitAt(
+    //               _rnd.nextInt(_chars.length),
+    //             )));
 
-    String getRandomString(int length) =>
-        String.fromCharCodes(Iterable.generate(
-            length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+    DateTime now = DateTime.now();
 
-    idController.text = 'SO-' + getRandomString(10);
+    idController.text = 'SO-' + DateFormat('ddMMyyyykkmmss').format(now);
 
     initializeDateFormatting();
     super.initState();
@@ -113,8 +137,8 @@ class _InputSessionPageState extends State<InputSessionPage> {
             height: 16,
           ),
           InputForm(
-            hintText: 'PIC',
-            labelText: 'PIC',
+            hintText: 'pic',
+            labelText: 'pic',
             controller: picController,
           ),
           const SizedBox(

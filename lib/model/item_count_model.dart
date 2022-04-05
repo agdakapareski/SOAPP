@@ -1,10 +1,10 @@
-import 'dart:convert';
 
 class ItemCount {
   int? id;
+  int? idSesi;
   String? kodeItem;
   String? namaItem;
-  String? idSesi;
+  String? kodeSesi;
   int? carton;
   int? box;
   int? unit;
@@ -14,9 +14,10 @@ class ItemCount {
 
   ItemCount({
     this.id,
+    this.idSesi,
     this.kodeItem,
     this.namaItem,
-    this.idSesi,
+    this.kodeSesi,
     this.carton,
     this.box,
     this.unit,
@@ -27,9 +28,10 @@ class ItemCount {
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        'id_sesi': idSesi,
         'kode_item': kodeItem,
         'nama_item': namaItem,
-        'id_sesi': idSesi,
+        'kode_sesi': kodeSesi,
         'carton': carton,
         'box': box,
         'unit': unit,
@@ -40,9 +42,10 @@ class ItemCount {
 
   factory ItemCount.fromJson(Map<String, dynamic> json) => ItemCount(
     id: json['id'],
+    idSesi: json['id_sesi'],
     kodeItem: json['kode_item'],
     namaItem: json['nama_item'],
-    idSesi: json['id_sesi'],
+    kodeSesi: json['kode_sesi'],
     carton: json['carton'],
     box: json['box'],
     unit: json['unit'],

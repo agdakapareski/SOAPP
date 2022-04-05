@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:soapp/database.dart';
 import 'package:soapp/item_list.dart';
 import 'package:soapp/widget/custom_button.dart';
 import 'package:soapp/widget/input_form.dart';
+
+import 'model/item_count_model.dart';
 
 class DetailCountPage extends StatefulWidget {
   final int? index;
   final String? kodeItem;
   final String? namaItem;
-  final String? idSesi;
+  final String? kodeSesi;
   final int? carton;
   final int? box;
   final int? unit;
   final int? saldoItem;
   final int? hitung;
 
-  const DetailCountPage(this.index, this.kodeItem, this.namaItem, this.idSesi,
+  const DetailCountPage(this.index, this.kodeItem, this.namaItem, this.kodeSesi,
       this.carton, this.box, this.unit, this.saldoItem, this.hitung,
       {Key? key})
       : super(key: key);
@@ -78,7 +81,6 @@ class _DetailCountPageState extends State<DetailCountPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     if (widget.hitung == 0) {
       setState(() {
         selisih = subtotal - widget.saldoItem!;
@@ -110,9 +112,20 @@ class _DetailCountPageState extends State<DetailCountPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: GestureDetector(
               onTap: () {
+                ItemCount item = ItemCount(
+                  id: widget.index,
+                  kodeItem: widget.kodeItem,
+                  namaItem: widget.namaItem,
+                  kodeSesi: widget.kodeSesi,
+                  carton: widget.carton,
+                  box: widget.box,
+                  unit: widget.unit,
+                  saldoItem: widget.saldoItem,
+                  hitung: subtotal,
+                  selisih: selisih,
+                );
                 setState(() {
-                  itemCounts[widget.index!].hitung = subtotal;
-                  itemCounts[widget.index!].selisih = selisih;
+                  Db().updateItemCounts(item);
                   Navigator.pop(context);
                 });
               },
@@ -151,7 +164,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text('Kode Sesi :'),
-              Text(widget.idSesi!),
+              Text(widget.kodeSesi!),
             ],
           ),
           const SizedBox(

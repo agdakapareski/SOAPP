@@ -1,27 +1,27 @@
 class Sesi {
   int? id;
-  String? idSesi;
+  String? kodeSesi;
   String? tanggal;
-  String? PIC;
+  String? pic;
 
   Sesi({
     this.id,
-    this.idSesi,
+    this.kodeSesi,
     this.tanggal,
-    this.PIC,
+    this.pic,
   });
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'id_sesi': idSesi,
+        'kode_sesi': kodeSesi,
         'tanggal': tanggal,
-        'pic': PIC,
+        'pic': pic,
       };
 
   factory Sesi.fromJson(Map<String, dynamic> json) => Sesi(
         id: json['id'],
-        idSesi: json['id_sesi'],
+        kodeSesi: json['kode_sesi'],
         tanggal: json['tanggal'],
-        PIC: json['pic'],
+        pic: json['pic'],
       );
 }

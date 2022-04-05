@@ -3,6 +3,9 @@ import 'package:soapp/input_session_page.dart';
 import 'package:soapp/item_list.dart';
 import 'package:soapp/stock_count_page.dart';
 
+import 'database.dart';
+import 'model/sesi_model.dart';
+
 class CountPage extends StatefulWidget {
   const CountPage({Key? key}) : super(key: key);
 
@@ -26,6 +29,9 @@ class _CountPageState extends State<CountPage> {
   // controller unit / box
   TextEditingController boxController = TextEditingController(text: '0');
 
+  /// list untuk menyimpan sesi
+  List<Sesi> sessions = [];
+
   // widget untuk memberi jarak antar widget
   final Widget objectPadding = const SizedBox(
     height: 18,
@@ -33,6 +39,16 @@ class _CountPageState extends State<CountPage> {
 
   Widget fix(String text) {
     return Text(text);
+  }
+
+  @override
+  void initState() {
+    Db().getSesi().then((value) {
+      setState(() {
+        sessions.addAll(value);
+      });
+    });
+    super.initState();
   }
 
   @override
@@ -49,10 +65,9 @@ class _CountPageState extends State<CountPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: GestureDetector(
-              onTap: () {
-                setState(() {
-
-                });
+              onTap: () async {
+                sessions = await Db().getSesi();
+                setState(() {});
               },
               child: const Icon(Icons.update),
             ),
@@ -76,17 +91,23 @@ class _CountPageState extends State<CountPage> {
             ListTile(
               onTap: () {
                 Route route = MaterialPageRoute(
-                    builder: (context) => StockCountPage(
-                        session.idSesi, session.tanggal, session.PIC));
+                  builder: (context) => StockCountPage(
+                    session.id,
+                    session.kodeSesi,
+                    session.tanggal,
+                    session.pic,
+                  ),
+                );
                 Navigator.push(context, route);
               },
               tileColor: Colors.white,
-              title: Text(session.idSesi.toString()),
-              subtitle: Text(session.tanggal! + ' - ' + session.PIC!),
+              title: Text(session.kodeSesi.toString()),
+              subtitle: Text(session.tanggal! + ' - ' + session.pic!),
               trailing: GestureDetector(
                 onTap: () {
                   setState(() {
                     sessions.removeAt(index);
+                    Db().deleteSesi(session.id!);
                   });
                 },
                 child: Icon(

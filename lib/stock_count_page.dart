@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:soapp/detail_count_page.dart';
+import 'package:soapp/database.dart';
 import 'package:soapp/widget/input_form.dart';
 
 import 'item_list.dart';
+import 'model/item_count_model.dart';
 
 class StockCountPage extends StatefulWidget {
-  final String? idSesi;
+  final int? idSesi;
+  final String? kodeSesi;
   final String? tanggalSesi;
   final String? pic;
 
-  const StockCountPage(this.idSesi, this.tanggalSesi, this.pic, {Key? key})
+  const StockCountPage(this.idSesi, this.kodeSesi, this.tanggalSesi, this.pic,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -19,11 +23,17 @@ class StockCountPage extends StatefulWidget {
 class _StockCountPageState extends State<StockCountPage> {
   TextEditingController searchController = TextEditingController();
 
+  List<ItemCount> itemCounts = [];
+
+  List<ItemCount> itemCountsForDisplay = [];
+
   @override
   void initState() {
-    // TODO: implement initState
-    setState(() {
-
+    Db().getItemCounts().then((value) {
+      setState(() {
+        itemCounts.addAll(value);
+        itemCountsForDisplay = itemCounts;
+      });
     });
     super.initState();
   }
@@ -60,7 +70,7 @@ class _StockCountPageState extends State<StockCountPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.idSesi!,
+                    widget.kodeSesi!,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 16),
                   ),
@@ -80,7 +90,7 @@ class _StockCountPageState extends State<StockCountPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('PIC :'),
+                      const Text('pic :'),
                       Text(widget.pic!),
                     ],
                   ),
@@ -107,8 +117,11 @@ class _StockCountPageState extends State<StockCountPage> {
           ),
           Expanded(
             child: RefreshIndicator(
-              onRefresh: () {
-                setState(() {});
+              onRefresh: () async {
+                itemCounts = await Db().getItemCounts();
+                setState(() {
+                  itemCountsForDisplay = itemCounts;
+                });
                 return Future.delayed(const Duration(milliseconds: 500));
               },
               child: ListView(
@@ -123,10 +136,10 @@ class _StockCountPageState extends State<StockCountPage> {
                             onTap: () {
                               Route route = MaterialPageRoute(
                                 builder: (context) => DetailCountPage(
-                                  itemCounts.indexOf(item),
+                                  item.id,
                                   item.kodeItem,
                                   item.namaItem,
-                                  item.idSesi,
+                                  item.kodeSesi,
                                   item.carton,
                                   item.box,
                                   item.unit,

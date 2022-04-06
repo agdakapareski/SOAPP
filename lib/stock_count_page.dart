@@ -29,7 +29,7 @@ class _StockCountPageState extends State<StockCountPage> {
 
   @override
   void initState() {
-    Db().getItemCounts().then((value) {
+    Db().getItemCounts(widget.idSesi!).then((value) {
       setState(() {
         itemCounts.addAll(value);
         itemCountsForDisplay = itemCounts;
@@ -118,7 +118,7 @@ class _StockCountPageState extends State<StockCountPage> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
-                itemCounts = await Db().getItemCounts();
+                itemCounts = await Db().getItemCounts(widget.idSesi!);
                 setState(() {
                   itemCountsForDisplay = itemCounts;
                 });
@@ -137,6 +137,7 @@ class _StockCountPageState extends State<StockCountPage> {
                               Route route = MaterialPageRoute(
                                 builder: (context) => DetailCountPage(
                                   item.id,
+                                  widget.idSesi,
                                   item.kodeItem,
                                   item.namaItem,
                                   item.kodeSesi,

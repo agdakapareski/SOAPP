@@ -103,7 +103,7 @@ class Db {
     batch.commit();
   }
 
-  Future<List<ItemCount>> getItemCounts() async {
+  Future<List<ItemCount>> getItemCounts(int id) async {
     var dbClient = await db;
     List<Map<String, dynamic>> maps = await dbClient.query(
       table2,
@@ -120,6 +120,8 @@ class Db {
         'hitung',
         'selisih'
       ],
+      where: 'id_sesi = ?',
+      whereArgs: [id],
     );
 
     List<ItemCount> itemCounts = [];

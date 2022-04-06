@@ -7,7 +7,8 @@ import 'package:soapp/widget/input_form.dart';
 import 'model/item_count_model.dart';
 
 class DetailCountPage extends StatefulWidget {
-  final int? index;
+  final int? id;
+  final int? idSesi;
   final String? kodeItem;
   final String? namaItem;
   final String? kodeSesi;
@@ -17,8 +18,17 @@ class DetailCountPage extends StatefulWidget {
   final int? saldoItem;
   final int? hitung;
 
-  const DetailCountPage(this.index, this.kodeItem, this.namaItem, this.kodeSesi,
-      this.carton, this.box, this.unit, this.saldoItem, this.hitung,
+  const DetailCountPage(
+      this.id,
+      this.idSesi,
+      this.kodeItem,
+      this.namaItem,
+      this.kodeSesi,
+      this.carton,
+      this.box,
+      this.unit,
+      this.saldoItem,
+      this.hitung,
       {Key? key})
       : super(key: key);
 
@@ -113,7 +123,8 @@ class _DetailCountPageState extends State<DetailCountPage> {
             child: GestureDetector(
               onTap: () {
                 ItemCount item = ItemCount(
-                  id: widget.index,
+                  id: widget.id,
+                  idSesi: widget.idSesi,
                   kodeItem: widget.kodeItem,
                   namaItem: widget.namaItem,
                   kodeSesi: widget.kodeSesi,
@@ -126,7 +137,9 @@ class _DetailCountPageState extends State<DetailCountPage> {
                 );
                 setState(() {
                   Db().updateItemCounts(item);
-                  Navigator.pop(context);
+                  Navigator.pop(context, () {
+                    setState(() {});
+                  });
                 });
               },
               child: const Icon(Icons.done),
@@ -301,13 +314,16 @@ class _DetailCountPageState extends State<DetailCountPage> {
                   onTap: () {
                     setState(() {
                       if (satuanFlag == 1) {
-                        subtotal = subtotal + (int.parse(jumlahController.text) * widget.unit!);
+                        subtotal = subtotal +
+                            (int.parse(jumlahController.text) * widget.unit!);
                       } else if (satuanFlag == 2) {
-                        subtotal = subtotal + (int.parse(jumlahController.text) * widget.box!);
+                        subtotal = subtotal +
+                            (int.parse(jumlahController.text) * widget.box!);
                       } else {
-                        subtotal = subtotal + (int.parse(jumlahController.text) * widget.carton!);
+                        subtotal = subtotal +
+                            (int.parse(jumlahController.text) * widget.carton!);
                       }
-                      selisih = subtotal -  widget.saldoItem!;
+                      selisih = subtotal - widget.saldoItem!;
                     });
                   },
                 ),

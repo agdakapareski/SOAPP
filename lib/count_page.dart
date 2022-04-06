@@ -61,18 +61,18 @@ class _CountPageState extends State<CountPage> {
         ),
         elevation: 0,
         backgroundColor: warnaUtama,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: GestureDetector(
-              onTap: () async {
-                sessions = await Db().getSesi();
-                setState(() {});
-              },
-              child: const Icon(Icons.update),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 16),
+        //     child: GestureDetector(
+        //       onTap: () async {
+        //         sessions = await Db().getSesi();
+        //         setState(() {});
+        //       },
+        //       child: const Icon(Icons.update),
+        //     ),
+        //   ),
+        // ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -83,45 +83,51 @@ class _CountPageState extends State<CountPage> {
         backgroundColor: Colors.red[800],
         child: const Icon(Icons.add),
       ),
-      body: ListView(
-          children: sessions.map((session) {
-        var index = sessions.indexOf(session);
-        return Column(
-          children: [
-            ListTile(
-              onTap: () {
-                Route route = MaterialPageRoute(
-                  builder: (context) => StockCountPage(
-                    session.id,
-                    session.kodeSesi,
-                    session.tanggal,
-                    session.pic,
-                  ),
-                );
-                Navigator.push(context, route);
-              },
-              tileColor: Colors.white,
-              title: Text(session.kodeSesi.toString()),
-              subtitle: Text(session.tanggal! + ' - ' + session.pic!),
-              trailing: GestureDetector(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          sessions = await Db().getSesi();
+          setState(() {});
+        },
+        child: ListView(
+            children: sessions.map((session) {
+          var index = sessions.indexOf(session);
+          return Column(
+            children: [
+              ListTile(
                 onTap: () {
-                  setState(() {
-                    sessions.removeAt(index);
-                    Db().deleteSesi(session.id!);
-                  });
+                  Route route = MaterialPageRoute(
+                    builder: (context) => StockCountPage(
+                      session.id,
+                      session.kodeSesi,
+                      session.tanggal,
+                      session.pic,
+                    ),
+                  );
+                  Navigator.push(context, route);
                 },
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.red[800],
+                tileColor: Colors.white,
+                title: Text(session.kodeSesi.toString()),
+                subtitle: Text(session.tanggal! + ' - ' + session.pic!),
+                trailing: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      sessions.removeAt(index);
+                      Db().deleteSesi(session.id!);
+                    });
+                  },
+                  child: Icon(
+                    Icons.delete,
+                    color: Colors.red[800],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-          ],
-        );
-      }).toList()),
+              const SizedBox(
+                height: 5,
+              ),
+            ],
+          );
+        }).toList()),
+      ),
     );
   }
 }

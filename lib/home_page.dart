@@ -70,7 +70,8 @@ class _HomePageState extends State<HomePage> {
     master.removeAt(0);
     master.join(',');
 
-    // print(master);
+    /// tampungan sementara hasil konversi csv
+    List<Item> i = [];
 
     /// convert list 2 dimensi menjadi list Item
     /// semula =  [
@@ -95,8 +96,15 @@ class _HomePageState extends State<HomePage> {
       );
 
       setState(() {
-        data.add(a);
+        i.add(a);
       });
+    }
+
+    if(data.isNotEmpty) {
+      data = [];
+      data.addAll(i);
+    } else {
+      data.addAll(i);
     }
     // print(data[0].carton.runtimeType);
   }

@@ -262,27 +262,93 @@ class _DetailCountPageState extends State<DetailCountPage> {
           const SizedBox(
             height: 15,
           ),
-          Row(
+          Column(
             children: [
-              Expanded(
-                flex: 6,
-                child: InputForm(
-                  labelText: 'jumlah item',
-                  hintText: 'jumlah item',
-                  controller: jumlahController,
-                  keyboardType: TextInputType.number,
-                ),
+              InputForm(
+                labelText: 'jumlah item',
+                hintText: 'jumlah item',
+                controller: jumlahController,
+                keyboardType: TextInputType.number,
               ),
-              Expanded(
-                flex: 2,
-                child: CustomButton(
-                  text: satuan,
-                  color: Colors.blueGrey,
-                  onTap: () {
-                    _showPicker(context);
-                  },
-                ),
+              const SizedBox(
+                height: 15,
               ),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          satuanFlag = 1;
+                        });
+                      },
+                      child: Container(
+                        color:
+                            satuanFlag == 1 ? Colors.red[800] : Colors.white,
+                        height: 50,
+                        child: Center(
+                          child: Text(
+                            'unit',
+                            style: TextStyle(
+                              color: satuanFlag == 1
+                                  ? Colors.grey[50]
+                                  : Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          satuanFlag = 2;
+                        });
+                      },
+                      child: Container(
+                        color:
+                            satuanFlag == 2 ? Colors.red[800] : Colors.white,
+                        height: 50,
+                        child: Center(
+                          child: Text(
+                            'box',
+                            style: TextStyle(
+                              color: satuanFlag == 2
+                                  ? Colors.grey[50]
+                                  : Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          satuanFlag = 3;
+                        });
+                      },
+                      child: Container(
+                        color:
+                            satuanFlag == 3 ? Colors.red[800] : Colors.white,
+                        height: 50,
+                        child: Center(
+                          child: Text(
+                            'carton',
+                            style: TextStyle(
+                              color: satuanFlag == 3
+                                  ? Colors.grey[50]
+                                  : Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
           const SizedBox(
@@ -298,7 +364,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
                   onTap: () {
                     setState(() {
                       subtotal = 0;
-                      selisih = 0;
+                      selisih = subtotal - widget.saldoItem!;
                     });
                   },
                 ),
@@ -324,6 +390,8 @@ class _DetailCountPageState extends State<DetailCountPage> {
                             (int.parse(jumlahController.text) * widget.carton!);
                       }
                       selisih = subtotal - widget.saldoItem!;
+                      jumlahController.clear();
+                      FocusScope.of(context).requestFocus(FocusNode());
                     });
                   },
                 ),

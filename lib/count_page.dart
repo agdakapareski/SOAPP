@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:soapp/input_session_page.dart';
 import 'package:soapp/item_list.dart';
 import 'package:soapp/stock_count_page.dart';
+import 'package:soapp/widget/confirm_dialog.dart';
 
 import 'database.dart';
 import 'model/sesi_model.dart';
@@ -110,10 +111,61 @@ class _CountPageState extends State<CountPage> {
                 subtitle: Text(session.tanggal! + ' - ' + session.pic!),
                 trailing: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      sessions.removeAt(index);
-                      Db().deleteSesi(session.id!);
-                    });
+                    confirmDialog(
+                      title: 'Konfirmasi',
+                      confirmation:
+                          'Apakah anda yakin ingin menghapus sesi ini?',
+                      context: context,
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                sessions.removeAt(index);
+                                Db().deleteSesi(session.id!);
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.red[800],
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Hapus',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Center(
+                                child: Text(
+                                  'batal',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.red[800],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
                   },
                   child: Icon(
                     Icons.delete,

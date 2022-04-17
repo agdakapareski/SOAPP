@@ -49,24 +49,24 @@ class _StockCountPageState extends State<StockCountPage> {
     Db().getItemCounts(widget.idSesi!).then((value) {
       setState(() {
         itemCounts.addAll(value);
-        print('itemCounts: ${itemCounts.length}');
+        // print('itemCounts: ${itemCounts.length}');
         itemBelumDihitung =
             itemCounts.where((element) => element.status == 0).toList();
-        print('itemNormal: ${itemNormal.length}');
+        // print('itemNormal: ${itemNormal.length}');
         itemNormal = itemCounts
             .where((element) => element.selisih == 0 && element.status == 1)
             .toList();
-        print('itemNormal: ${itemNormal.length}');
+        // print('itemNormal: ${itemNormal.length}');
         itemSelisih = itemCounts
             .where((element) => element.selisih != 0 && element.status == 1)
             .toList();
-        print('itemSelisih: ${itemSelisih.length}');
+        // print('itemSelisih: ${itemSelisih.length}');
         itemNormalForDisplay = itemNormal;
-        print('itemNormalForDisplay: ${itemNormalForDisplay.length}');
+        // print('itemNormalForDisplay: ${itemNormalForDisplay.length}');
         itemSelisihForDisplay = itemSelisih;
-        print('itemSelisihForDisplay: ${itemSelisihForDisplay.length}');
+        // print('itemSelisihForDisplay: ${itemSelisihForDisplay.length}');
         itemBelumDihitungForDisplay = itemBelumDihitung;
-        print('display belum dihitung: ${itemBelumDihitung.length}');
+        // print('display belum dihitung: ${itemBelumDihitung.length}');
       });
     });
     super.initState();

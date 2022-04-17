@@ -85,7 +85,12 @@ class _StockCountPageState extends State<StockCountPage> {
       "Hasil Hitungan",
       "Selisih"
     ]);
-    List<ItemCount> combine = itemBelumDihitung + itemNormal + itemSelisih;
+    List<ItemCount> combine = await Db().getItemCounts(widget.idSesi!);
+    // Db().getItemCounts(widget.idSesi!).then((value) {
+    //   setState(() {
+    //     combine = value;
+    //   });
+    // });
     for (var i in combine) {
       data.add([
         i.kodeItem!,
@@ -104,7 +109,7 @@ class _StockCountPageState extends State<StockCountPage> {
     //   // ["2", randomAlpha(3), randomNumeric(3)],
     //   // ["3", randomAlpha(3), randomNumeric(3)]
     // ];
-    print(data);
+    print(data.length);
     String csvData = const ListToCsvConverter().convert(data);
     Directory directory = Directory("/storage/emulated/0/Download");
     final path = "${directory.path}/${widget.kodeSesi}-${widget.pic}.csv";

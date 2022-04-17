@@ -77,9 +77,16 @@ class _CountPageState extends State<CountPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Route route =
-              MaterialPageRoute(builder: (context) => const InputSessionPage());
-          Navigator.push(context, route);
+          if (data.isEmpty) {
+            var snackBar = const SnackBar(
+              content: Text('Upload Master Data Terlebih Dahulu!'),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          } else {
+            Route route = MaterialPageRoute(
+                builder: (context) => const InputSessionPage());
+            Navigator.push(context, route);
+          }
         },
         backgroundColor: Colors.red[800],
         child: const Icon(Icons.add),

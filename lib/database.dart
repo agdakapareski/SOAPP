@@ -11,7 +11,7 @@ class Db {
   static Database? _db;
   static const String table2 = 'item_counts';
   static const String table1 = 'sesi';
-  static const String dbName = 'soapp.db';
+  static const String dbName = 'soapp_app.db';
   static const itemCountstable = "CREATE TABLE $table2("
       "id INTEGER PRIMARY KEY AUTOINCREMENT, "
       "id_sesi INTEGER, "
@@ -24,6 +24,7 @@ class Db {
       "saldo_item INTEGER, "
       "hitung INTEGER, "
       "selisih INTEGER, "
+      "status INTEGER, "
       "FOREIGN KEY (id_sesi) "
       "REFERENCES sesi(id) "
       "ON DELETE CASCADE)";
@@ -118,7 +119,8 @@ class Db {
         'unit',
         'saldo_item',
         'hitung',
-        'selisih'
+        'selisih',
+        'status',
       ],
       where: 'id_sesi = ?',
       whereArgs: [id],

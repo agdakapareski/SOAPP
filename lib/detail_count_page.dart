@@ -134,12 +134,11 @@ class _DetailCountPageState extends State<DetailCountPage> {
                   saldoItem: widget.saldoItem,
                   hitung: subtotal,
                   selisih: selisih,
+                  status: 1,
                 );
                 setState(() {
                   Db().updateItemCounts(item);
-                  Navigator.pop(context, () {
-                    setState(() {});
-                  });
+                  Navigator.pop(context);
                 });
               },
               child: const Icon(Icons.done),

@@ -68,6 +68,7 @@ class _InputSessionPageState extends State<InputSessionPage> {
             saldoItem: d.saldoItem,
             hitung: 0,
             selisih: 0 - d.saldoItem!,
+            status: 0,
           );
           createItemCounts.add(itemCount);
         }

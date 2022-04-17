@@ -1,4 +1,3 @@
-
 class ItemCount {
   int? id;
   int? idSesi;
@@ -11,6 +10,7 @@ class ItemCount {
   int? saldoItem;
   int? hitung;
   int? selisih;
+  int? status;
 
   ItemCount({
     this.id,
@@ -24,6 +24,7 @@ class ItemCount {
     this.saldoItem,
     this.hitung,
     this.selisih,
+    this.status,
   });
 
   Map<String, dynamic> toJson() => {
@@ -38,19 +39,21 @@ class ItemCount {
         'saldo_item': saldoItem,
         'hitung': hitung,
         'selisih': selisih,
+        'status': status,
       };
 
   factory ItemCount.fromJson(Map<String, dynamic> json) => ItemCount(
-    id: json['id'],
-    idSesi: json['id_sesi'],
-    kodeItem: json['kode_item'],
-    namaItem: json['nama_item'],
-    kodeSesi: json['kode_sesi'],
-    carton: json['carton'],
-    box: json['box'],
-    unit: json['unit'],
-    saldoItem: json['saldo_item'],
-    hitung: json['hitung'],
-    selisih: json['selisih'],
-  );
+        id: json['id'],
+        idSesi: json['id_sesi'],
+        kodeItem: json['kode_item'],
+        namaItem: json['nama_item'],
+        kodeSesi: json['kode_sesi'],
+        carton: json['carton'],
+        box: json['box'],
+        unit: json['unit'],
+        saldoItem: json['saldo_item'],
+        hitung: json['hitung'],
+        selisih: json['selisih'],
+        status: json['status'],
+      );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:soapp/database.dart';
 import 'package:soapp/item_list.dart';
+import 'package:soapp/widget/confirm_dialog.dart';
 import 'package:soapp/widget/custom_button.dart';
 import 'package:soapp/widget/input_form.dart';
 
@@ -47,47 +48,47 @@ class _DetailCountPageState extends State<DetailCountPage> {
 
   int satuanFlag = 1;
 
-  void _showPicker(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return SafeArea(
-              child: Wrap(
-            children: [
-              ListTile(
-                title: const Text('carton'),
-                onTap: () {
-                  setState(() {
-                    satuan = 'carton';
-                    satuanFlag = 3;
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-              ListTile(
-                title: const Text('box'),
-                onTap: () {
-                  setState(() {
-                    satuan = 'box';
-                    satuanFlag = 2;
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-              ListTile(
-                title: const Text('unit'),
-                onTap: () {
-                  setState(() {
-                    satuan = 'unit';
-                    satuanFlag = 1;
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-            ],
-          ));
-        });
-  }
+  // void _showPicker(context) {
+  //   showModalBottomSheet(
+  //       context: context,
+  //       builder: (context) {
+  //         return SafeArea(
+  //             child: Wrap(
+  //           children: [
+  //             ListTile(
+  //               title: const Text('carton'),
+  //               onTap: () {
+  //                 setState(() {
+  //                   satuan = 'carton';
+  //                   satuanFlag = 3;
+  //                   Navigator.pop(context);
+  //                 });
+  //               },
+  //             ),
+  //             ListTile(
+  //               title: const Text('box'),
+  //               onTap: () {
+  //                 setState(() {
+  //                   satuan = 'box';
+  //                   satuanFlag = 2;
+  //                   Navigator.pop(context);
+  //                 });
+  //               },
+  //             ),
+  //             ListTile(
+  //               title: const Text('unit'),
+  //               onTap: () {
+  //                 setState(() {
+  //                   satuan = 'unit';
+  //                   satuanFlag = 1;
+  //                   Navigator.pop(context);
+  //                 });
+  //               },
+  //             ),
+  //           ],
+  //         ));
+  //       });
+  // }
 
   @override
   void initState() {
@@ -278,18 +279,17 @@ class _DetailCountPageState extends State<DetailCountPage> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          satuanFlag = 1;
+                          satuanFlag = 3;
                         });
                       },
                       child: Container(
-                        color:
-                            satuanFlag == 1 ? Colors.red[800] : Colors.white,
+                        color: satuanFlag == 3 ? Colors.red[800] : Colors.white,
                         height: 50,
                         child: Center(
                           child: Text(
-                            'unit',
+                            'carton',
                             style: TextStyle(
-                              color: satuanFlag == 1
+                              color: satuanFlag == 3
                                   ? Colors.grey[50]
                                   : Colors.black,
                             ),
@@ -306,8 +306,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
                         });
                       },
                       child: Container(
-                        color:
-                            satuanFlag == 2 ? Colors.red[800] : Colors.white,
+                        color: satuanFlag == 2 ? Colors.red[800] : Colors.white,
                         height: 50,
                         child: Center(
                           child: Text(
@@ -326,18 +325,17 @@ class _DetailCountPageState extends State<DetailCountPage> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          satuanFlag = 3;
+                          satuanFlag = 1;
                         });
                       },
                       child: Container(
-                        color:
-                            satuanFlag == 3 ? Colors.red[800] : Colors.white,
+                        color: satuanFlag == 1 ? Colors.red[800] : Colors.white,
                         height: 50,
                         child: Center(
                           child: Text(
-                            'carton',
+                            'unit',
                             style: TextStyle(
-                              color: satuanFlag == 3
+                              color: satuanFlag == 1
                                   ? Colors.grey[50]
                                   : Colors.black,
                             ),
@@ -357,22 +355,78 @@ class _DetailCountPageState extends State<DetailCountPage> {
             children: [
               Expanded(
                 flex: 1,
-                child: CustomButton(
-                  text: 'Clear',
-                  color: Colors.grey[700],
+                child: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      subtotal = 0;
-                      selisih = subtotal - widget.saldoItem!;
-                    });
+                    confirmDialog(
+                      title: 'Konfirmasi',
+                      confirmation: 'Apakah anda yakin ingin menghapus data?',
+                      context: context,
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                subtotal = 0;
+                                selisih = subtotal - widget.saldoItem!;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.red[800],
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Hapus',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Center(
+                                child: Text(
+                                  'batal',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.red[800],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
                   },
+                  child: Container(
+                    height: 55.9,
+                    color: Colors.grey[700],
+                    child: const Icon(
+                      Icons.clear,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(
                 width: 10,
               ),
               Expanded(
-                flex: 3,
+                flex: 5,
                 child: CustomButton(
                   text: 'Tambah',
                   color: Colors.red[800],

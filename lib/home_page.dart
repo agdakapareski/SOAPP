@@ -34,8 +34,10 @@ class _HomePageState extends State<HomePage> {
     fontWeight: FontWeight.bold,
   );
 
-  /// fungsi untuk memuat file dari storage
-  /// -> file csv masih harus template, tidak semua csv bisa masuk
+  /* 
+  fungsi untuk memuat file dari storage
+  -> file csv masih harus template, tidak semua csv bisa masuk 
+  */
   loadCsvFromStorage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowedExtensions: ['csv'],
@@ -47,52 +49,58 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  /// memuat file csv yang sudah dipilih dan di convert ke list
-  /// -> convert ke list 2 dimensi, lalu di convert lagi ke List<Item>
+  /* 
+  memuat file csv yang sudah dipilih dan di convert ke list
+  -> convert ke list 2 dimensi, lalu di convert lagi ke List<Item> 
+  */
   loadingCsvData(String path) async {
     final csvFile = File(path).openRead();
     List<List<dynamic>> master = await csvFile
         .transform(utf8.decoder)
         .transform(
-          const CsvToListConverter(eol: '\n'),
+          const CsvToListConverter(eol: '\n', fieldDelimiter: ';'),
         )
         .toList();
-    // print(master);
-    // print(master.length);
+    print(master);
+    print(master.length);
 
-    /// menghapus index yang memuat header
-    /// [
-    ///    ['no', 'nama', 'carton', 'box', 'unit', 'saldo'], <- menghilangkan index ini, karena header tidak diperlukan disini
-    ///    [1, 'konidin', 30, 10, 1, 234],
-    ///    [2, 'boom', 20, 5, 1, 300],
-    ///    ...
-    /// ]
+    /* 
+    menghapus index yang memuat header
+    [
+       ['no', 'nama', 'carton', 'box', 'unit', 'saldo'], <- menghilangkan index ini, karena header tidak diperlukan disini
+       [1, 'konidin', 30, 10, 1, 234],
+       [2, 'boom', 20, 5, 1, 300],
+       ...
+    ] 
+    */
     master.removeAt(0);
     master.join(',');
 
     /// tampungan sementara hasil konversi csv
     List<Item> i = [];
 
-    /// convert list 2 dimensi menjadi list Item
-    /// semula =  [
-    ///             [1, 'konidin', 30, 10, 1, 234],
-    ///             [2, 'boom', 20, 5, 1, 300],
-    ///             ...
-    ///           ]
-    ///
-    /// menjadi = [
-    ///             Item(kodeItem: 1, namaItem: 'konidin', carton: 30, box: 10, unit: 1, saldoItem: 234),
-    ///             Item(kodeItem: 2, namaItem: 'boom', carton: 20, box: 5, unit: 1, saldoItem: 300),
-    ///             ...
-    ///           ]
+    /* 
+    convert list 2 dimensi menjadi list Item
+    semula =  [
+                [1, 'konidin', 30, 10, 1, 234],
+                [2, 'boom', 20, 5, 1, 300],
+                ...
+              ]
+    
+    menjadi = [
+                Item(kodeItem: 1, namaItem: 'konidin', carton: 30, box: 10, unit: 1, saldoItem: 234),
+                Item(kodeItem: 2, namaItem: 'boom', carton: 20, box: 5, unit: 1, saldoItem: 300),
+                ...
+              ]   
+    */
     for (var item in master) {
       Item a = Item(
         kodeItem: item[0],
         namaItem: item[1],
-        carton: item[2],
-        box: item[3],
-        unit: item[4],
-        saldoItem: item[5],
+        carton: item[2].runtimeType == String ? int.parse(item[2]) : item[2],
+        box: item[3].runtimeType == String ? int.parse(item[3]) : item[3],
+        unit: item[4].runtimeType == String ? int.parse(item[4]) : item[4],
+        saldoItem: item[5].runtimeType == String ? int.parse(item[5]) : item[5],
       );
 
       setState(() {
@@ -100,7 +108,7 @@ class _HomePageState extends State<HomePage> {
       });
     }
 
-    if(data.isNotEmpty) {
+    if (data.isNotEmpty) {
       data = [];
       data.addAll(i);
     } else {
@@ -159,6 +167,7 @@ class _HomePageState extends State<HomePage> {
                     (item) => Column(
                       children: [
                         ListTile(
+                          isThreeLine: true,
                           tileColor: Colors.white,
                           title: Text(item.kodeItem.toString()),
                           subtitle: Text(item.namaItem!),

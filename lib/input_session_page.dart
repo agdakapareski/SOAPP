@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -7,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:soapp/database.dart';
 import 'package:soapp/model/item_count_model.dart';
 import 'package:soapp/stock_count_page.dart';
-import 'package:soapp/tab_screen.dart';
 import 'package:soapp/widget/custom_button.dart';
 import 'package:soapp/widget/input_form.dart';
 
@@ -54,24 +51,23 @@ class _InputSessionPageState extends State<InputSessionPage> {
     setState(() {
       // sessions.add(sesi);
 
-
       List<ItemCount> createItemCounts = [];
-        for (var d in data) {
-          ItemCount itemCount = ItemCount(
-            idSesi: idS,
-            kodeItem: d.kodeItem,
-            namaItem: d.namaItem,
-            kodeSesi: idController.text,
-            carton: d.carton,
-            box: d.box,
-            unit: d.unit,
-            saldoItem: d.saldoItem,
-            hitung: 0,
-            selisih: 0 - d.saldoItem!,
-            status: 0,
-          );
-          createItemCounts.add(itemCount);
-        }
+      for (var d in data) {
+        ItemCount itemCount = ItemCount(
+          idSesi: idS,
+          kodeItem: d.kodeItem,
+          namaItem: d.namaItem,
+          kodeSesi: idController.text,
+          carton: d.carton,
+          box: d.box,
+          unit: d.unit,
+          saldoItem: d.saldoItem,
+          hitung: 0,
+          selisih: 0 - d.saldoItem!,
+          status: 0,
+        );
+        createItemCounts.add(itemCount);
+      }
 
       Db().saveItemCounts(createItemCounts);
 
@@ -80,7 +76,6 @@ class _InputSessionPageState extends State<InputSessionPage> {
             tanggalController.text, picController.text),
       );
       Navigator.pushReplacement(context, route);
-
     });
   }
 

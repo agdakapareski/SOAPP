@@ -2,7 +2,6 @@ import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:soapp/detail_count_page.dart';
 import 'package:soapp/database.dart';
-import 'package:soapp/model/item_model.dart';
 import 'package:soapp/widget/input_form.dart';
 
 import 'package:permission_handler/permission_handler.dart';
@@ -26,26 +25,30 @@ class StockCountPage extends StatefulWidget {
 }
 
 class _StockCountPageState extends State<StockCountPage> {
+  /// controller search
   TextEditingController searchController = TextEditingController();
 
+  /// list semua item yang akan dilakukan stock opname
   List<ItemCount> itemCounts = [];
 
+  /// list item yang tidak selisih - setelah dihitung
+  List<ItemCount> itemNormal = [];
   List<ItemCount> itemNormalForDisplay = [];
 
+  /// list item yang selisih - setelah dihitung
+  List<ItemCount> itemSelisih = [];
   List<ItemCount> itemSelisihForDisplay = [];
 
-  List<ItemCount> itemSelisih = [];
-
-  List<ItemCount> itemNormal = [];
-
+  /// list item yang belum dihitung
   List<ItemCount> itemBelumDihitung = [];
-
   List<ItemCount> itemBelumDihitungForDisplay = [];
 
+  /// penanda tab[Belum dihitung, Selesai, Selisih] yang sedang aktif
   int kolomFlag = 1;
 
   @override
   void initState() {
+    /// mengambil data dari database
     Db().getItemCounts(widget.idSesi!).then((value) {
       setState(() {
         itemCounts.addAll(value);
@@ -72,25 +75,26 @@ class _StockCountPageState extends State<StockCountPage> {
     super.initState();
   }
 
+  /// Fungsi untuk generate data file yang sudah dihitung
+  /// menjadi file .csv dan disimpan dalam folder download
   generateCsv() async {
-    // List<List<String>> item = [];
+    /// list untuk menampung data yang akan di convert ke .csv
     List<List<String>> data = [];
+
+    /// memasukkan header
     data.add([
-      "Kode",
-      "Nama",
-      "Crt",
-      "Box",
-      "Unit",
-      "Saldo",
-      "Hasil Hitungan",
-      "Selisih"
+      "KODE",
+      "NAMA",
+      "CRT",
+      "BOX",
+      "UNIT",
+      "SALDO",
+      "HASIL HITUNGAN",
+      "SELISIH"
     ]);
+
+    /// memasukkan data item ke dalam list
     List<ItemCount> combine = await Db().getItemCounts(widget.idSesi!);
-    // Db().getItemCounts(widget.idSesi!).then((value) {
-    //   setState(() {
-    //     combine = value;
-    //   });
-    // });
     for (var i in combine) {
       data.add([
         i.kodeItem!,
@@ -103,22 +107,22 @@ class _StockCountPageState extends State<StockCountPage> {
         i.selisih.toString()
       ]);
     }
-    // [
-    //   // ["No.", "Name", "Roll No."],
-    //   // ["1", randomAlpha(3), randomNumeric(3)],
-    //   // ["2", randomAlpha(3), randomNumeric(3)],
-    //   // ["3", randomAlpha(3), randomNumeric(3)]
-    // ];
-    print(data.length);
-    String csvData = const ListToCsvConverter().convert(data);
+
+    /// format csv yang akan di export
+    String csvData =
+        const ListToCsvConverter(fieldDelimiter: ';').convert(data);
+
+    /// Direktori file csv
     Directory directory = Directory("/storage/emulated/0/Download");
     final path = "${directory.path}/${widget.kodeSesi}-${widget.pic}.csv";
-    print(path);
+    // print(path);
     final File file = File(path);
     Map<Permission, PermissionStatus> statuses = await [
       Permission.storage,
     ].request();
     await file.writeAsString(csvData);
+
+    /// snackbar notifikasi jika simpan csv berhasil
     var snackBar = const SnackBar(
       content: Text('Export .csv Berhasil!'),
     );
@@ -167,20 +171,72 @@ class _StockCountPageState extends State<StockCountPage> {
                     height: 5,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Tanggal :'),
-                      Text(widget.tanggalSesi!),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('pic :'),
-                      Text(widget.pic!),
+                      Expanded(
+                        flex: 8,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Tanggal :'),
+                                Text(widget.tanggalSesi!),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('pic :'),
+                                Text(widget.pic!),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: GestureDetector(
+                          onTap: () async {
+                            List<ItemCount> itemsNormal = [];
+                            List<ItemCount> itemsSelisih = [];
+                            List<ItemCount> itemsBelumDihitung = [];
+
+                            itemBelumDihitung =
+                                await Db().getItemCounts(widget.idSesi!);
+                            itemsBelumDihitung = itemBelumDihitung
+                                .where((element) => element.status == 0)
+                                .toList();
+                            itemNormal =
+                                await Db().getItemCounts(widget.idSesi!);
+                            itemsNormal = itemNormal
+                                .where((element) =>
+                                    element.selisih == 0 && element.status == 1)
+                                .toList();
+                            itemSelisih =
+                                await Db().getItemCounts(widget.idSesi!);
+                            itemsSelisih = itemSelisih
+                                .where((element) =>
+                                    element.selisih != 0 && element.status == 1)
+                                .toList();
+                            setState(() {
+                              itemNormalForDisplay = itemsNormal;
+                              itemSelisihForDisplay = itemsSelisih;
+                              itemBelumDihitungForDisplay = itemsBelumDihitung;
+                            });
+
+                            return Future.delayed(
+                                const Duration(milliseconds: 500));
+                          },
+                          child: Icon(
+                            Icons.refresh,
+                            size: 35,
+                            color: Colors.red[800],
+                          ),
+                        ),
+                      )
                     ],
                   ),
                   const SizedBox(
@@ -282,15 +338,16 @@ class _StockCountPageState extends State<StockCountPage> {
                     hintText: 'search',
                     controller: searchController,
                     onChanged: (text) {
-                      if(kolomFlag == 1){
+                      if (kolomFlag == 1) {
                         text = text.toLowerCase();
                         setState(() {
-                          itemBelumDihitungForDisplay = itemBelumDihitung.where((element) {
+                          itemBelumDihitungForDisplay =
+                              itemBelumDihitung.where((element) {
                             var itemTitle = element.namaItem!.toLowerCase();
                             return itemTitle.contains(text);
                           }).toList();
                         });
-                      }else if (kolomFlag == 2) {
+                      } else if (kolomFlag == 2) {
                         text = text.toLowerCase();
                         setState(() {
                           itemNormalForDisplay = itemNormal.where((element) {
@@ -314,232 +371,203 @@ class _StockCountPageState extends State<StockCountPage> {
             ),
           ),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                List<ItemCount> itemsNormal = [];
-                List<ItemCount> itemsSelisih = [];
-                List<ItemCount> itemsBelumDihitung = [];
-
-                itemBelumDihitung = await Db().getItemCounts(widget.idSesi!);
-                itemsBelumDihitung = itemBelumDihitung
-                    .where((element) => element.status == 0)
-                    .toList();
-                itemNormal = await Db().getItemCounts(widget.idSesi!);
-                itemsNormal = itemNormal
-                    .where((element) => element.selisih == 0 && element.status == 1)
-                    .toList();
-                itemSelisih = await Db().getItemCounts(widget.idSesi!);
-                itemsSelisih = itemSelisih
-                    .where((element) => element.selisih != 0 && element.status == 1)
-                    .toList();
-                setState(() {
-                  itemNormalForDisplay = itemsNormal;
-                  itemSelisihForDisplay = itemsSelisih;
-                  itemBelumDihitungForDisplay = itemsBelumDihitung;
-                });
-
-                return Future.delayed(const Duration(milliseconds: 500));
-              },
-              child: ListView(
-                  padding: const EdgeInsets.only(top: 5),
-                  shrinkWrap: true,
-                  children: kolomFlag == 1
-                      ? itemBelumDihitungForDisplay
-                          .where((element) => element.idSesi == widget.idSesi)
-                          .map(
-                            (item) => Column(
-                              children: [
-                                ListTile(
-                                  isThreeLine: true,
-                                  onTap: () {
-                                    Route route = MaterialPageRoute(
-                                      builder: (context) => DetailCountPage(
-                                        item.id,
-                                        widget.idSesi,
-                                        item.kodeItem,
-                                        item.namaItem,
-                                        item.kodeSesi,
-                                        item.carton,
-                                        item.box,
-                                        item.unit,
-                                        item.saldoItem,
-                                        item.hitung,
-                                      ),
-                                    );
-
-                                    Navigator.push(context, route);
-                                  },
-                                  tileColor: Colors.white,
-                                  title: Row(
-                                    children: [
-                                      Text(
-                                        item.kodeItem.toString(),
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        ' - Saldo: ${item.saldoItem}',
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  subtitle: Text(
-                                    item.namaItem!,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      // overflow: TextOverflow.ellipsis
+            child: ListView(
+                padding: const EdgeInsets.only(top: 5),
+                shrinkWrap: true,
+                children: kolomFlag == 1
+                    ? itemBelumDihitungForDisplay
+                        .where((element) => element.idSesi == widget.idSesi)
+                        .map(
+                          (item) => Column(
+                            children: [
+                              ListTile(
+                                isThreeLine: true,
+                                onTap: () {
+                                  Route route = MaterialPageRoute(
+                                    builder: (context) => DetailCountPage(
+                                      item.id,
+                                      widget.idSesi,
+                                      item.kodeItem,
+                                      item.namaItem,
+                                      item.kodeSesi,
+                                      item.carton,
+                                      item.box,
+                                      item.unit,
+                                      item.saldoItem,
+                                      item.hitung,
                                     ),
-                                  ),
-                                  trailing:
-                                      Text('${item.hitung} (${item.selisih})'),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                              ],
-                            ),
-                          )
-                          .toList()
-                      : (kolomFlag == 2
-                          ? itemNormalForDisplay
-                              .where(
-                                  (element) => element.idSesi == widget.idSesi)
-                              .map(
-                                (item) => Column(
+                                  );
+
+                                  Navigator.push(context, route);
+                                },
+                                tileColor: Colors.white,
+                                title: Row(
                                   children: [
-                                    ListTile(
-                                      isThreeLine: true,
-                                      onTap: () {
-                                        Route route = MaterialPageRoute(
-                                          builder: (context) => DetailCountPage(
-                                            item.id,
-                                            widget.idSesi,
-                                            item.kodeItem,
-                                            item.namaItem,
-                                            item.kodeSesi,
-                                            item.carton,
-                                            item.box,
-                                            item.unit,
-                                            item.saldoItem,
-                                            item.hitung,
-                                          ),
-                                        );
-
-                                        Navigator.push(context, route);
-                                      },
-                                      tileColor: Colors.white,
-                                      title: Row(
-                                        children: [
-                                          Text(
-                                            item.kodeItem.toString(),
-                                            style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            ' - Saldo: ${item.saldoItem}',
-                                            style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                        ],
+                                    Text(
+                                      item.kodeItem.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      subtitle: Text(
-                                        item.namaItem!,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          // overflow: TextOverflow.ellipsis
-                                        ),
-                                      ),
-                                      trailing: Text(
-                                          '${item.hitung} (${item.selisih})'),
                                     ),
-                                    const SizedBox(
-                                      height: 5,
+                                    Text(
+                                      ' - Saldo: ${item.saldoItem}',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 13,
+                                      ),
                                     ),
                                   ],
                                 ),
-                              )
-                              .toList()
-                          : itemSelisihForDisplay
-                              .where(
-                                  (element) => element.idSesi == widget.idSesi)
-                              .map(
-                                (item) => Column(
-                                  children: [
-                                    ListTile(
-                                      isThreeLine: true,
-                                      onTap: () {
-                                        Route route = MaterialPageRoute(
-                                          builder: (context) => DetailCountPage(
-                                            item.id,
-                                            widget.idSesi,
-                                            item.kodeItem,
-                                            item.namaItem,
-                                            item.kodeSesi,
-                                            item.carton,
-                                            item.box,
-                                            item.unit,
-                                            item.saldoItem,
-                                            item.hitung,
-                                          ),
-                                        );
-
-                                        Navigator.push(context, route);
-                                      },
-                                      tileColor: Colors.white,
-                                      title: Row(
-                                        children: [
-                                          Text(
-                                            item.kodeItem.toString(),
-                                            style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            ' - Saldo: ${item.saldoItem}',
-                                            style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      subtitle: Text(
-                                        item.namaItem!,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          // overflow: TextOverflow.ellipsis
-                                        ),
-                                      ),
-                                      trailing: Text(
-                                          '${item.hitung} (${item.selisih})'),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                  ],
+                                subtitle: Text(
+                                  item.namaItem!,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    // overflow: TextOverflow.ellipsis
+                                  ),
                                 ),
-                              )
-                              .toList())),
-            ),
+                                trailing:
+                                    Text('${item.hitung} (${item.selisih})'),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                            ],
+                          ),
+                        )
+                        .toList()
+                    : (kolomFlag == 2
+                        ? itemNormalForDisplay
+                            .where((element) => element.idSesi == widget.idSesi)
+                            .map(
+                              (item) => Column(
+                                children: [
+                                  ListTile(
+                                    isThreeLine: true,
+                                    onTap: () {
+                                      Route route = MaterialPageRoute(
+                                        builder: (context) => DetailCountPage(
+                                          item.id,
+                                          widget.idSesi,
+                                          item.kodeItem,
+                                          item.namaItem,
+                                          item.kodeSesi,
+                                          item.carton,
+                                          item.box,
+                                          item.unit,
+                                          item.saldoItem,
+                                          item.hitung,
+                                        ),
+                                      );
+
+                                      Navigator.push(context, route);
+                                    },
+                                    tileColor: Colors.white,
+                                    title: Row(
+                                      children: [
+                                        Text(
+                                          item.kodeItem.toString(),
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          ' - Saldo: ${item.saldoItem}',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    subtitle: Text(
+                                      item.namaItem!,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        // overflow: TextOverflow.ellipsis
+                                      ),
+                                    ),
+                                    trailing: Text(
+                                        '${item.hitung} (${item.selisih})'),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                ],
+                              ),
+                            )
+                            .toList()
+                        : itemSelisihForDisplay
+                            .where((element) => element.idSesi == widget.idSesi)
+                            .map(
+                              (item) => Column(
+                                children: [
+                                  ListTile(
+                                    isThreeLine: true,
+                                    onTap: () {
+                                      Route route = MaterialPageRoute(
+                                        builder: (context) => DetailCountPage(
+                                          item.id,
+                                          widget.idSesi,
+                                          item.kodeItem,
+                                          item.namaItem,
+                                          item.kodeSesi,
+                                          item.carton,
+                                          item.box,
+                                          item.unit,
+                                          item.saldoItem,
+                                          item.hitung,
+                                        ),
+                                      );
+
+                                      Navigator.push(context, route);
+                                    },
+                                    tileColor: Colors.white,
+                                    title: Row(
+                                      children: [
+                                        Text(
+                                          item.kodeItem.toString(),
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          ' - Saldo: ${item.saldoItem}',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    subtitle: Text(
+                                      item.namaItem!,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        // overflow: TextOverflow.ellipsis
+                                      ),
+                                    ),
+                                    trailing: Text(
+                                        '${item.hitung} (${item.selisih})'),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                ],
+                              ),
+                            )
+                            .toList())),
           ),
         ],
       ),

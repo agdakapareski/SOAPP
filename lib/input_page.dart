@@ -56,7 +56,6 @@ class _InputPageState extends State<InputPage> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: Text(judulPage.toUpperCase()),

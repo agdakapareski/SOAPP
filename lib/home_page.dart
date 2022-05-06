@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   /// judul aplikasi yang terletak pada app bar
   /// -> kemungkinan bakal dihilangkan
-  String judulApp = 'SOAPP';
+  String judulApp = 'Master Produk';
 
   /// alamat file yang akan dipilih untuk dimuat ke aplikasi
   String? path;
@@ -34,10 +34,8 @@ class _HomePageState extends State<HomePage> {
     fontWeight: FontWeight.bold,
   );
 
-  /* 
-  fungsi untuk memuat file dari storage
-  -> file csv masih harus template, tidak semua csv bisa masuk 
-  */
+  /// fungsi untuk memuat file dari storage
+  /// -> file csv masih harus template, tidak semua csv bisa masuk
   loadCsvFromStorage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowedExtensions: ['csv'],
@@ -49,10 +47,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  /* 
-  memuat file csv yang sudah dipilih dan di convert ke list
-  -> convert ke list 2 dimensi, lalu di convert lagi ke List<Item> 
-  */
+  /// memuat file csv yang sudah dipilih dan di convert ke list
+  /// -> convert ke list 2 dimensi, lalu di convert lagi ke List<Item>
   loadingCsvData(String path) async {
     final csvFile = File(path).openRead();
     List<List<dynamic>> master = await csvFile
@@ -61,38 +57,35 @@ class _HomePageState extends State<HomePage> {
           const CsvToListConverter(eol: '\n', fieldDelimiter: ';'),
         )
         .toList();
-    print(master);
-    print(master.length);
+    // print(master);
+    // print(master.length);
 
-    /* 
-    menghapus index yang memuat header
-    [
-       ['no', 'nama', 'carton', 'box', 'unit', 'saldo'], <- menghilangkan index ini, karena header tidak diperlukan disini
-       [1, 'konidin', 30, 10, 1, 234],
-       [2, 'boom', 20, 5, 1, 300],
-       ...
-    ] 
-    */
+    /// menghapus index yang memuat header
+    /// [
+    ///    ['no', 'nama', 'carton', 'box', 'unit', 'saldo'], <- menghilangkan index ini, karena header tidak diperlukan disini
+    ///    [1, 'konidin', 30, 10, 1, 234],
+    ///    [2, 'boom', 20, 5, 1, 300],
+    ///    ...
+    /// ]
     master.removeAt(0);
     master.join(',');
 
     /// tampungan sementara hasil konversi csv
     List<Item> i = [];
 
-    /* 
-    convert list 2 dimensi menjadi list Item
-    semula =  [
-                [1, 'konidin', 30, 10, 1, 234],
-                [2, 'boom', 20, 5, 1, 300],
-                ...
-              ]
-    
-    menjadi = [
-                Item(kodeItem: 1, namaItem: 'konidin', carton: 30, box: 10, unit: 1, saldoItem: 234),
-                Item(kodeItem: 2, namaItem: 'boom', carton: 20, box: 5, unit: 1, saldoItem: 300),
-                ...
-              ]   
-    */
+    /// convert list 2 dimensi menjadi list Item
+    /// semula =  [
+    ///             [1, 'konidin', 30, 10, 1, 234],
+    ///             [2, 'boom', 20, 5, 1, 300],
+    ///             ...
+    ///           ]
+    ///
+    /// menjadi = [
+    ///             Item(kodeItem: 1, namaItem: 'konidin', carton: 30, box: 10, unit: 1, saldoItem: 234),
+    ///             Item(kodeItem: 2, namaItem: 'boom', carton: 20, box: 5, unit: 1, saldoItem: 300),
+    ///             ...
+    ///           ]
+
     for (var item in master) {
       Item a = Item(
         kodeItem: item[0],

@@ -1,7 +1,4 @@
 import 'package:soapp/model/item_model.dart';
-import 'package:soapp/model/sesi_model.dart';
-
-import 'model/item_count_model.dart';
 
 // List<Item> items = [
 //   Item(kodeItem: 'RT-001', namaItem: 'Roti Tawar', saldoItem: 100),
@@ -11,8 +8,5 @@ import 'model/item_count_model.dart';
 //   Item(kodeItem: 'MI-005', namaItem: 'Mie Instan', saldoItem: 88),
 // ];
 
-
 /// list untuk menyimpan master data dari csv
 List<Item> data = [];
-
-

@@ -115,10 +115,10 @@ class _InputSessionPageState extends State<InputSessionPage> {
         padding: const EdgeInsets.all(16),
         children: [
           InputForm(
-            hintText: 'id',
-            labelText: 'id',
+            hintText: 'kode sesi',
+            labelText: 'kode sesi',
             controller: idController,
-            readonly: true,
+            readonly: false,
           ),
           const SizedBox(
             height: 16,

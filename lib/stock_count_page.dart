@@ -117,6 +117,7 @@ class _StockCountPageState extends State<StockCountPage> {
     final path = "${directory.path}/${widget.kodeSesi}-${widget.pic}.csv";
     // print(path);
     final File file = File(path);
+    // ignore: unused_local_variable
     Map<Permission, PermissionStatus> statuses = await [
       Permission.storage,
     ].request();

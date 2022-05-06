@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:soapp/database.dart';
-import 'package:soapp/item_list.dart';
 import 'package:soapp/widget/confirm_dialog.dart';
 import 'package:soapp/widget/custom_button.dart';
 import 'package:soapp/widget/input_form.dart';

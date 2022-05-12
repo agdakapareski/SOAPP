@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:soapp/database.dart';
 import 'package:soapp/model/item_count_model.dart';
+import 'package:soapp/providers/sesi_provider.dart';
 import 'package:soapp/stock_count_page.dart';
 import 'package:soapp/widget/custom_button.dart';
 import 'package:soapp/widget/input_form.dart';
@@ -32,53 +36,6 @@ class _InputSessionPageState extends State<InputSessionPage> {
 
   List<ItemCount> itemCountsForDisplay = [];
 
-  inputSession() async {
-    Sesi sesi = Sesi(
-      kodeSesi: idController.text,
-      pic: picController.text,
-      tanggal: tanggalController.text,
-    );
-
-    int idS = 0;
-    idS = await Db().saveSesi(sesi);
-
-    // Sesi s = Sesi(
-    //     id: sesi.id,
-    //     kodeSesi: sesi.kodeSesi,
-    //     pic: sesi.pic,
-    //     tanggal: sesi.tanggal);
-
-    setState(() {
-      // sessions.add(sesi);
-
-      List<ItemCount> createItemCounts = [];
-      for (var d in data) {
-        ItemCount itemCount = ItemCount(
-          idSesi: idS,
-          kodeItem: d.kodeItem,
-          namaItem: d.namaItem,
-          kodeSesi: idController.text,
-          carton: d.carton,
-          box: d.box,
-          unit: d.unit,
-          saldoItem: d.saldoItem,
-          hitung: 0,
-          selisih: 0 - d.saldoItem!,
-          status: 0,
-        );
-        createItemCounts.add(itemCount);
-      }
-
-      Db().saveItemCounts(createItemCounts);
-
-      Route route = MaterialPageRoute(
-        builder: (context) => StockCountPage(sesi.id, idController.text,
-            tanggalController.text, picController.text),
-      );
-      Navigator.pushReplacement(context, route);
-    });
-  }
-
   @override
   void initState() {
     // const _chars = '1234567890';
@@ -101,6 +58,7 @@ class _InputSessionPageState extends State<InputSessionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final sesiProvider = Provider.of<SesiProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -143,7 +101,55 @@ class _InputSessionPageState extends State<InputSessionPage> {
           CustomButton(
             color: Colors.red[800],
             text: 'Input',
-            onTap: inputSession,
+            onTap: () async {
+              Sesi sesi = Sesi(
+                kodeSesi: idController.text,
+                pic: picController.text,
+                tanggal: tanggalController.text,
+              );
+
+              int idS = sesiProvider.idSesi;
+              idS = await sesiProvider.saveSesi(sesi);
+
+              // Sesi s = Sesi(
+              //     id: sesi.id,
+              //     kodeSesi: sesi.kodeSesi,
+              //     pic: sesi.pic,
+              //     tanggal: sesi.tanggal);
+
+              setState(() {
+                // sessions.add(sesi);
+
+                List<ItemCount> createItemCounts = [];
+                for (var d in data) {
+                  ItemCount itemCount = ItemCount(
+                    idSesi: idS,
+                    kodeItem: d.kodeItem,
+                    namaItem: d.namaItem,
+                    kodeSesi: idController.text,
+                    carton: d.carton,
+                    box: d.box,
+                    unit: d.unit,
+                    saldoItem: d.saldoItem,
+                    hitung: 0,
+                    selisih: 0 - d.saldoItem!,
+                    status: 0,
+                  );
+                  createItemCounts.add(itemCount);
+                }
+
+                Db().saveItemCounts(createItemCounts);
+
+                Route route = MaterialPageRoute(
+                  builder: (context) => StockCountPage(
+                      sesi.id,
+                      idController.text,
+                      tanggalController.text,
+                      picController.text),
+                );
+                Navigator.pushReplacement(context, route);
+              });
+            },
           )
         ],
       ),

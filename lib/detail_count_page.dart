@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:soapp/database.dart';
+import 'package:soapp/providers/stock_provider.dart';
 import 'package:soapp/widget/confirm_dialog.dart';
 import 'package:soapp/widget/custom_button.dart';
 import 'package:soapp/widget/input_form.dart';
@@ -106,6 +108,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
 
   @override
   Widget build(BuildContext context) {
+    final stockProvider = Provider.of<StockProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -137,7 +140,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
                   status: 1,
                 );
                 setState(() {
-                  Db().updateItemCounts(item);
+                  stockProvider.updateItemCounts(widget.idSesi!, item);
                   Navigator.pop(context);
                 });
               },

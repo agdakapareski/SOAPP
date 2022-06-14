@@ -47,6 +47,7 @@ class _StockCountPageState extends State<StockCountPage> {
 
   /// penanda tab[Belum dihitung, Selesai, Selisih] yang sedang aktif
   int kolomFlag = 1;
+  bool isKode = false;
 
   @override
   void initState() {
@@ -328,37 +329,85 @@ class _StockCountPageState extends State<StockCountPage> {
                     height: 10,
                   ),
                   InputForm(
+                    suffix: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isKode = !isKode;
+                        });
+                      },
+                      child: Text(
+                        'kode',
+                        style: TextStyle(
+                          color: isKode ? Colors.red[800] : Colors.black,
+                        ),
+                      ),
+                    ),
                     labelText: 'search',
                     hintText: 'search',
                     controller: searchController,
                     onChanged: (text) {
                       if (kolomFlag == 1) {
-                        text = text.toLowerCase();
-                        setState(() {
-                          stockProvider.itemBelumDihitungForDisplay =
-                              stockProvider.itemBelumDihitung.where((element) {
-                            var itemTitle = element.namaItem!.toLowerCase();
-                            return itemTitle.contains(text);
-                          }).toList();
-                        });
+                        if (isKode == false) {
+                          text = text.toLowerCase();
+                          setState(() {
+                            stockProvider.itemBelumDihitungForDisplay =
+                                stockProvider.itemBelumDihitung
+                                    .where((element) {
+                              var itemTitle = element.namaItem!.toLowerCase();
+                              return itemTitle.contains(text);
+                            }).toList();
+                          });
+                        } else {
+                          text = text.toLowerCase();
+                          setState(() {
+                            stockProvider.itemBelumDihitungForDisplay =
+                                stockProvider.itemBelumDihitung
+                                    .where((element) {
+                              var itemTitle = element.kodeItem!.toLowerCase();
+                              return itemTitle.contains(text);
+                            }).toList();
+                          });
+                        }
                       } else if (kolomFlag == 2) {
-                        text = text.toLowerCase();
-                        setState(() {
-                          stockProvider.itemNormalForDisplay =
-                              stockProvider.itemNormal.where((element) {
-                            var itemTitle = element.namaItem!.toLowerCase();
-                            return itemTitle.contains(text);
-                          }).toList();
-                        });
+                        if (isKode == false) {
+                          text = text.toLowerCase();
+                          setState(() {
+                            stockProvider.itemNormalForDisplay =
+                                stockProvider.itemNormal.where((element) {
+                              var itemTitle = element.namaItem!.toLowerCase();
+                              return itemTitle.contains(text);
+                            }).toList();
+                          });
+                        } else {
+                          text = text.toLowerCase();
+                          setState(() {
+                            stockProvider.itemNormalForDisplay =
+                                stockProvider.itemNormal.where((element) {
+                              var itemTitle = element.kodeItem!.toLowerCase();
+                              return itemTitle.contains(text);
+                            }).toList();
+                          });
+                        }
                       } else {
-                        text = text.toLowerCase();
-                        setState(() {
-                          stockProvider.itemSelisihForDisplay =
-                              stockProvider.itemSelisih.where((element) {
-                            var itemTitle = element.namaItem!.toLowerCase();
-                            return itemTitle.contains(text);
-                          }).toList();
-                        });
+                        if (isKode == false) {
+                          text = text.toLowerCase();
+                          setState(() {
+                            stockProvider.itemSelisihForDisplay =
+                                stockProvider.itemSelisih.where((element) {
+                              var itemTitle = element.namaItem!.toLowerCase();
+                              return itemTitle.contains(text);
+                            }).toList();
+                          });
+                        } else {
+                          text = text.toLowerCase();
+                          setState(() {
+                            stockProvider.itemSelisihForDisplay =
+                                stockProvider.itemSelisih.where((element) {
+                              var itemTitle = element.kodeItem!.toLowerCase();
+                              return itemTitle.contains(text);
+                            }).toList();
+                          });
+                        }
                       }
                     },
                   ),

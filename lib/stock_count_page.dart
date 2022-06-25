@@ -87,7 +87,8 @@ class _StockCountPageState extends State<StockCountPage> {
     List<List<String>> data = [];
 
     /// memasukkan header
-    data.add(["KODE", "NAMA", "SALDO", "HASIL HITUNGAN", "SELISIH"]);
+    data.add(
+        ["KODE", "NAMA", "SALDO", "HASIL HITUNGAN", "SELISIH", "KETERANGAN"]);
 
     /// memasukkan data item ke dalam list
     List<ItemCount> combine = await Db().getItemCounts(widget.idSesi!);
@@ -97,7 +98,8 @@ class _StockCountPageState extends State<StockCountPage> {
         i.namaItem!,
         i.saldoItem.toString(),
         i.hitung.toString(),
-        i.selisih.toString()
+        i.selisih.toString(),
+        i.keterangan ?? '-',
       ]);
     }
 
@@ -440,6 +442,8 @@ class _StockCountPageState extends State<StockCountPage> {
                                     item.unit,
                                     item.saldoItem,
                                     item.hitung,
+                                    item.status,
+                                    item.keterangan,
                                   ),
                                 );
 
@@ -505,6 +509,8 @@ class _StockCountPageState extends State<StockCountPage> {
                                         item.unit,
                                         item.saldoItem,
                                         item.hitung,
+                                        item.status,
+                                        item.keterangan,
                                       ),
                                     );
 
@@ -530,14 +536,24 @@ class _StockCountPageState extends State<StockCountPage> {
                                       ),
                                     ],
                                   ),
-                                  subtitle: Text(
-                                    item.namaItem!,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      // overflow: TextOverflow.ellipsis
-                                    ),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.namaItem!,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          // overflow: TextOverflow.ellipsis
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 2,
+                                      ),
+                                      Text('keterangan: ${item.keterangan}'),
+                                    ],
                                   ),
                                   trailing:
                                       Text('${item.hitung} (${item.selisih})'),
@@ -569,6 +585,8 @@ class _StockCountPageState extends State<StockCountPage> {
                                         item.unit,
                                         item.saldoItem,
                                         item.hitung,
+                                        item.status,
+                                        item.keterangan,
                                       ),
                                     );
 
@@ -594,14 +612,24 @@ class _StockCountPageState extends State<StockCountPage> {
                                       ),
                                     ],
                                   ),
-                                  subtitle: Text(
-                                    item.namaItem!,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      // overflow: TextOverflow.ellipsis
-                                    ),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.namaItem!,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          // overflow: TextOverflow.ellipsis
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 2,
+                                      ),
+                                      Text('keterangan: ${item.keterangan}'),
+                                    ],
                                   ),
                                   trailing:
                                       Text('${item.hitung} (${item.selisih})'),

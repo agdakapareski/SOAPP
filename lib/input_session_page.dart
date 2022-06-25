@@ -94,6 +94,7 @@ class _InputSessionPageState extends State<InputSessionPage> {
             hintText: 'pic',
             labelText: 'pic',
             controller: picController,
+            textCapitalization: TextCapitalization.words,
           ),
           const SizedBox(
             height: 16,

@@ -11,6 +11,7 @@ class ItemCount {
   int? hitung;
   int? selisih;
   int? status;
+  String? keterangan;
 
   ItemCount({
     this.id,
@@ -25,6 +26,7 @@ class ItemCount {
     this.hitung,
     this.selisih,
     this.status,
+    this.keterangan,
   });
 
   Map<String, dynamic> toJson() => {
@@ -40,6 +42,7 @@ class ItemCount {
         'hitung': hitung,
         'selisih': selisih,
         'status': status,
+        'keterangan': keterangan,
       };
 
   factory ItemCount.fromJson(Map<String, dynamic> json) => ItemCount(
@@ -55,5 +58,6 @@ class ItemCount {
         hitung: json['hitung'],
         selisih: json['selisih'],
         status: json['status'],
+        keterangan: json['keterangan'],
       );
 }

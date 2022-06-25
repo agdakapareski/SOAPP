@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:soapp/database.dart';
+import 'package:soapp/model/histori_model.dart';
+import 'package:soapp/providers/histori_provider.dart';
+
 import 'package:soapp/providers/stock_provider.dart';
 import 'package:soapp/widget/confirm_dialog.dart';
 import 'package:soapp/widget/custom_button.dart';
@@ -19,6 +23,8 @@ class DetailCountPage extends StatefulWidget {
   final int? unit;
   final int? saldoItem;
   final int? hitung;
+  final int? status;
+  final String? keterangan;
 
   const DetailCountPage(
       this.id,
@@ -31,6 +37,8 @@ class DetailCountPage extends StatefulWidget {
       this.unit,
       this.saldoItem,
       this.hitung,
+      this.status,
+      this.keterangan,
       {Key? key})
       : super(key: key);
 
@@ -40,6 +48,7 @@ class DetailCountPage extends StatefulWidget {
 
 class _DetailCountPageState extends State<DetailCountPage> {
   TextEditingController jumlahController = TextEditingController();
+  TextEditingController keteranganController = TextEditingController();
 
   int subtotal = 0;
 
@@ -103,12 +112,22 @@ class _DetailCountPageState extends State<DetailCountPage> {
         selisih = subtotal - widget.saldoItem!;
       });
     }
+    final historiProvider =
+        Provider.of<HistoriProvider>(context, listen: false);
+    if (widget.status == 0) {
+      historiProvider.deleteHistori(widget.id!);
+      historiProvider.getHistori(widget.id!);
+    } else {
+      historiProvider.getHistori(widget.id!);
+    }
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final stockProvider = Provider.of<StockProvider>(context);
+    final historiProvider = Provider.of<HistoriProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -138,7 +157,11 @@ class _DetailCountPageState extends State<DetailCountPage> {
                   hitung: subtotal,
                   selisih: selisih,
                   status: 1,
+                  keterangan: keteranganController.text == ''
+                      ? '-'
+                      : keteranganController.text,
                 );
+
                 setState(() {
                   stockProvider.updateItemCounts(widget.idSesi!, item);
                   Navigator.pop(context);
@@ -227,6 +250,16 @@ class _DetailCountPageState extends State<DetailCountPage> {
             children: [
               const Text('Saldo :'),
               Text('${widget.saldoItem!}'),
+            ],
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Keterangan :'),
+              Text(widget.keterangan ?? '-'),
             ],
           ),
           const SizedBox(
@@ -347,7 +380,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
           const SizedBox(
@@ -370,6 +403,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
                               setState(() {
                                 subtotal = 0;
                                 selisih = subtotal - widget.saldoItem!;
+                                historiProvider.deleteHistori(widget.id!);
                               });
                               Navigator.pop(context);
                             },
@@ -433,25 +467,95 @@ class _DetailCountPageState extends State<DetailCountPage> {
                   text: 'Tambah',
                   color: Colors.red[800],
                   onTap: () {
+                    Histori h = Histori();
                     setState(() {
-                      if (satuanFlag == 1) {
-                        subtotal = subtotal +
-                            (int.parse(jumlahController.text) * widget.unit!);
-                      } else if (satuanFlag == 2) {
-                        subtotal = subtotal +
-                            (int.parse(jumlahController.text) * widget.box!);
+                      if (jumlahController.text != '') {
+                        if (satuanFlag == 1) {
+                          subtotal = subtotal +
+                              (int.parse(jumlahController.text) * widget.unit!);
+                          h.satuan = 'unit';
+                        } else if (satuanFlag == 2) {
+                          subtotal = subtotal +
+                              (int.parse(jumlahController.text) * widget.box!);
+                          h.satuan = 'box';
+                        } else {
+                          subtotal = subtotal +
+                              (int.parse(jumlahController.text) *
+                                  widget.carton!);
+                          h.satuan = 'carton';
+                        }
+                        selisih = subtotal - widget.saldoItem!;
+                        historiProvider.saveHistori(
+                          Histori(
+                            idItem: widget.id,
+                            jumlah: int.parse(jumlahController.text),
+                            satuan: h.satuan,
+                          ),
+                          widget.id!,
+                        );
+                        jumlahController.clear();
+                        FocusScope.of(context).requestFocus(FocusNode());
                       } else {
-                        subtotal = subtotal +
-                            (int.parse(jumlahController.text) * widget.carton!);
+                        return;
                       }
-                      selisih = subtotal - widget.saldoItem!;
-                      jumlahController.clear();
-                      FocusScope.of(context).requestFocus(FocusNode());
                     });
                   },
                 ),
               ),
             ],
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          InputForm(
+            labelText: 'keterangan',
+            hintText: 'keterangan',
+            controller: keteranganController,
+            textCapitalization: TextCapitalization.sentences,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          SizedBox(
+            height: 60,
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              children: historiProvider.historis.isNotEmpty
+                  ? historiProvider.historis
+                      .map(
+                        (histori) => Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: Container(
+                            width: 60,
+                            color: Colors.grey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  histori.jumlah! > 0
+                                      ? '+${histori.jumlah}'
+                                      : histori.jumlah.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  histori.satuan!,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList()
+                  : [const Text('...')],
+            ),
           ),
         ],
       ),

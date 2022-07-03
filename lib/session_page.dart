@@ -6,9 +6,6 @@ import 'package:soapp/providers/sesi_provider.dart';
 import 'package:soapp/stock_count_page.dart';
 import 'package:soapp/widget/confirm_dialog.dart';
 
-import 'database.dart';
-import 'model/sesi_model.dart';
-
 class CountPage extends StatefulWidget {
   const CountPage({Key? key}) : super(key: key);
 

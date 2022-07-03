@@ -55,10 +55,6 @@ class Db {
     return _db!;
   }
 
-  // TODO 1 : bikin fungsi simpan histori
-
-  // TODO 2: nambah keterangan ke model
-
   initDb() async {
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, dbName);

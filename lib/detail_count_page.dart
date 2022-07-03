@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soapp/model/histori_model.dart';
@@ -102,6 +100,11 @@ class _DetailCountPageState extends State<DetailCountPage> {
 
   @override
   void initState() {
+    if (widget.keterangan != '-') {
+      setState(() {
+        keteranganController.text = widget.keterangan!;
+      });
+    }
     if (widget.hitung == 0) {
       setState(() {
         selisih = subtotal - widget.saldoItem!;

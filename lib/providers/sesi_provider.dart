@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 import 'package:soapp/database.dart';
 
 import '../model/sesi_model.dart';

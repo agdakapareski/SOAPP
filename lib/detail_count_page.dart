@@ -102,7 +102,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
   void initState() {
     if (widget.keterangan != '-') {
       setState(() {
-        keteranganController.text = widget.keterangan!;
+        keteranganController.text = widget.keterangan ?? '-';
       });
     }
     if (widget.hitung == 0) {

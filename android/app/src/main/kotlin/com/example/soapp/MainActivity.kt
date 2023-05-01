@@ -1,4 +1,4 @@
-package com.prototype.soapp
+package com.prototype.soapppreview
 
 import io.flutter.embedding.android.FlutterActivity
 

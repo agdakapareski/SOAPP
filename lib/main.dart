@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:soapp/home_page.dart';
 import 'package:soapp/providers/histori_provider.dart';
 import 'package:soapp/providers/sesi_provider.dart';
 import 'package:soapp/providers/stock_provider.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Lato',
         primarySwatch: Colors.red,
       ),
-      home: const SplashScreen(),
+      // home: const SplashScreen(),
+      home: const HomePage(),
     );
   }
 }

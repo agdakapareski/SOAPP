@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       title: 'SOAPP',
       theme: ThemeData(
         fontFamily: 'Lato',
-        primarySwatch: Colors.red,
+        // primarySwatch: Colors.red,
       ),
       // home: const SplashScreen(),
       home: const TabScreen(),

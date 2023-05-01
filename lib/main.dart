@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-import 'package:soapp/home_page.dart';
 import 'package:soapp/providers/histori_provider.dart';
 import 'package:soapp/providers/sesi_provider.dart';
 import 'package:soapp/providers/stock_provider.dart';
-import 'package:soapp/splash_screen.dart';
+// import 'package:soapp/splash_screen.dart';
+import 'package:soapp/tab_screen.dart';
 
 void main() {
   runApp(
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
       ),
       // home: const SplashScreen(),
-      home: const HomePage(),
+      home: const TabScreen(),
     );
   }
 }

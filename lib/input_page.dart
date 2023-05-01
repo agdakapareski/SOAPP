@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:soapp/session_page.dart';
 import 'package:soapp/widget/custom_button.dart';
 import 'widget/input_form.dart';
+import 'package:soapp/widget/colors.dart';
 
 class InputPage extends StatefulWidget {
   const InputPage({Key? key}) : super(key: key);
@@ -14,9 +15,6 @@ class InputPage extends StatefulWidget {
 class _InputPageState extends State<InputPage> {
   // text judul page
   final String judulPage = 'tambah item';
-
-  // warna utama aplikasi
-  final Color? warnaUtama = Colors.red[800];
 
   // controller nama item
   TextEditingController namaItemController = TextEditingController();

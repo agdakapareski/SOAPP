@@ -5,6 +5,7 @@ import 'package:soapp/item_list.dart';
 import 'package:soapp/providers/sesi_provider.dart';
 import 'package:soapp/stock_count_page.dart';
 import 'package:soapp/widget/confirm_dialog.dart';
+import 'package:soapp/widget/colors.dart';
 
 class CountPage extends StatefulWidget {
   const CountPage({Key? key}) : super(key: key);
@@ -16,9 +17,6 @@ class CountPage extends StatefulWidget {
 class _CountPageState extends State<CountPage> {
   // text judul page
   String judulPage = 'stock opname';
-
-  // warna utama aplikasi
-  final Color? warnaUtama = Colors.red[800];
 
   // controller saldo
   TextEditingController unitController = TextEditingController(text: '0');
@@ -91,7 +89,7 @@ class _CountPageState extends State<CountPage> {
             Navigator.push(context, route);
           }
         },
-        backgroundColor: Colors.red[800],
+        backgroundColor: warnaUtama,
         child: const Icon(Icons.add),
       ),
       body: ListView(
@@ -131,7 +129,7 @@ class _CountPageState extends State<CountPage> {
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: Colors.red[800],
+                              color: warnaUtama,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: const Center(
@@ -159,7 +157,7 @@ class _CountPageState extends State<CountPage> {
                                 'batal',
                                 style: TextStyle(
                                   fontSize: 13,
-                                  color: Colors.red[800],
+                                  color: warnaUtama,
                                 ),
                               ),
                             ),
@@ -171,7 +169,7 @@ class _CountPageState extends State<CountPage> {
                 },
                 child: Icon(
                   Icons.delete,
-                  color: Colors.red[800],
+                  color: warnaUtama,
                 ),
               ),
             ),

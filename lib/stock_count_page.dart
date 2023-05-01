@@ -5,6 +5,7 @@ import 'package:soapp/detail_count_page.dart';
 import 'package:soapp/database.dart';
 import 'package:soapp/providers/stock_provider.dart';
 import 'package:soapp/widget/input_form.dart';
+import 'package:soapp/widget/colors.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 
@@ -134,7 +135,7 @@ class _StockCountPageState extends State<StockCountPage> {
           'Hitung Stock',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.red[800],
+        backgroundColor: warnaUtama,
         elevation: 0,
         centerTitle: true,
         actions: [
@@ -230,7 +231,7 @@ class _StockCountPageState extends State<StockCountPage> {
                       //     child: Icon(
                       //       Icons.refresh,
                       //       size: 35,
-                      //       color: Colors.red[800],
+                      //       color: warnaUtama,
                       //     ),
                       //   ),
                       // )
@@ -251,9 +252,8 @@ class _StockCountPageState extends State<StockCountPage> {
                             });
                           },
                           child: Container(
-                            color: kolomFlag == 1
-                                ? Colors.red[800]
-                                : Colors.grey[50],
+                            color:
+                                kolomFlag == 1 ? warnaUtama : Colors.grey[50],
                             height: 50,
                             child: Center(
                               child: Text(
@@ -279,9 +279,8 @@ class _StockCountPageState extends State<StockCountPage> {
                             });
                           },
                           child: Container(
-                            color: kolomFlag == 2
-                                ? Colors.red[800]
-                                : Colors.grey[50],
+                            color:
+                                kolomFlag == 2 ? warnaUtama : Colors.grey[50],
                             height: 50,
                             child: Center(
                               child: Text(
@@ -307,9 +306,8 @@ class _StockCountPageState extends State<StockCountPage> {
                             });
                           },
                           child: Container(
-                            color: kolomFlag == 3
-                                ? Colors.red[800]
-                                : Colors.grey[50],
+                            color:
+                                kolomFlag == 3 ? warnaUtama : Colors.grey[50],
                             height: 50,
                             child: Center(
                               child: Text(
@@ -340,7 +338,7 @@ class _StockCountPageState extends State<StockCountPage> {
                       child: Text(
                         'kode',
                         style: TextStyle(
-                          color: isKode ? Colors.red[800] : Colors.black,
+                          color: isKode ? warnaUtama : Colors.black,
                         ),
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:soapp/session_page.dart';
 import 'package:soapp/home_page.dart';
+import 'package:soapp/widget/colors.dart';
 
 class TabScreen extends StatefulWidget {
   const TabScreen({Key? key}) : super(key: key);
@@ -44,12 +45,12 @@ class _TabScreenState extends State<TabScreen> {
                   children: [
                     Icon(
                       Icons.upload_file,
-                      color: currentTab == 1 ? Colors.red[800] : Colors.grey,
+                      color: currentTab == 1 ? warnaUtama : Colors.grey,
                     ),
                     Text(
                       'Master Data',
                       style: TextStyle(
-                        color: currentTab == 1 ? Colors.red[800] : Colors.grey,
+                        color: currentTab == 1 ? warnaUtama : Colors.grey,
                       ),
                     )
                   ],
@@ -67,12 +68,12 @@ class _TabScreenState extends State<TabScreen> {
                   children: [
                     Icon(
                       Icons.calculate_outlined,
-                      color: currentTab == 2 ? Colors.red[800] : Colors.grey,
+                      color: currentTab == 2 ? warnaUtama : Colors.grey,
                     ),
                     Text(
                       'Stock Opname',
                       style: TextStyle(
-                        color: currentTab == 2 ? Colors.red[800] : Colors.grey,
+                        color: currentTab == 2 ? warnaUtama : Colors.grey,
                       ),
                     )
                   ],

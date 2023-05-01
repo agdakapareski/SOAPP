@@ -8,6 +8,7 @@ import 'package:soapp/providers/sesi_provider.dart';
 import 'package:soapp/stock_count_page.dart';
 import 'package:soapp/widget/custom_button.dart';
 import 'package:soapp/widget/input_form.dart';
+import 'package:soapp/widget/colors.dart';
 
 import 'item_list.dart';
 import 'model/sesi_model.dart';
@@ -62,7 +63,7 @@ class _InputSessionPageState extends State<InputSessionPage> {
           'Input Sesi',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.red[800],
+        backgroundColor: warnaUtama,
         elevation: 0,
         centerTitle: true,
       ),
@@ -97,7 +98,7 @@ class _InputSessionPageState extends State<InputSessionPage> {
             height: 16,
           ),
           CustomButton(
-            color: Colors.red[800],
+            color: warnaUtama,
             text: 'Input',
             onTap: () async {
               Sesi sesi = Sesi(

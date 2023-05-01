@@ -1,6 +1,11 @@
-# soapp
+# SOAPP
 
-A new Flutter project.
+Project untuk pembuatan aplikasi stock opname
+
+## Branching
+- master (untuk final review)
+- develop (untuk develop)
+- preview_linkedin (untuk preview aplikasi secara umum)
 
 ## Getting Started
 

@@ -7,6 +7,7 @@ import 'package:soapp/providers/stock_provider.dart';
 import 'package:soapp/widget/confirm_dialog.dart';
 import 'package:soapp/widget/custom_button.dart';
 import 'package:soapp/widget/input_form.dart';
+import 'package:soapp/widget/colors.dart';
 
 import 'model/item_count_model.dart';
 
@@ -139,7 +140,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.red[800],
+        backgroundColor: warnaUtama,
         elevation: 0,
         centerTitle: true,
         actions: [
@@ -321,7 +322,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
                         });
                       },
                       child: Container(
-                        color: satuanFlag == 3 ? Colors.red[800] : Colors.white,
+                        color: satuanFlag == 3 ? warnaUtama : Colors.white,
                         height: 50,
                         child: Center(
                           child: Text(
@@ -344,7 +345,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
                         });
                       },
                       child: Container(
-                        color: satuanFlag == 2 ? Colors.red[800] : Colors.white,
+                        color: satuanFlag == 2 ? warnaUtama : Colors.white,
                         height: 50,
                         child: Center(
                           child: Text(
@@ -367,7 +368,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
                         });
                       },
                       child: Container(
-                        color: satuanFlag == 1 ? Colors.red[800] : Colors.white,
+                        color: satuanFlag == 1 ? warnaUtama : Colors.white,
                         height: 50,
                         child: Center(
                           child: Text(
@@ -413,7 +414,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
                             child: Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: Colors.red[800],
+                                color: warnaUtama,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: const Center(
@@ -441,7 +442,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
                                   'batal',
                                   style: TextStyle(
                                     fontSize: 13,
-                                    color: Colors.red[800],
+                                    color: warnaUtama,
                                   ),
                                 ),
                               ),
@@ -468,7 +469,7 @@ class _DetailCountPageState extends State<DetailCountPage> {
                 flex: 5,
                 child: CustomButton(
                   text: 'Tambah',
-                  color: Colors.red[800],
+                  color: warnaUtama,
                   onTap: () {
                     Histori h = Histori();
                     setState(() {

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:soapp/item_list.dart';
 import 'package:soapp/model/item_model.dart';
 import 'package:soapp/widget/custom_button.dart';
+import 'package:soapp/widget/colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,10 +23,6 @@ class _HomePageState extends State<HomePage> {
 
   /// alamat file yang akan dipilih untuk dimuat ke aplikasi
   String? path;
-
-  /// warna utama aplikasi
-  /// -> kemungkinan masih diganti ke kode warna yang lebih spesifik
-  final Color? warnaUtama = Colors.red[800];
 
   /// style section judul
   final TextStyle styleJudul = const TextStyle(
@@ -146,7 +143,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 loadCsvFromStorage();
               },
-              color: Colors.red[800],
+              color: warnaUtama,
             ),
           ),
           Expanded(

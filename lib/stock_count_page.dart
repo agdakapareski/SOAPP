@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:soapp/detail_count_page.dart';
 import 'package:soapp/database.dart';
+import 'package:soapp/model/histori_model.dart';
 import 'package:soapp/providers/stock_provider.dart';
 import 'package:soapp/widget/input_form.dart';
 import 'package:soapp/widget/colors.dart';
@@ -88,12 +89,25 @@ class _StockCountPageState extends State<StockCountPage> {
     List<List<String>> data = [];
 
     /// memasukkan header
-    data.add(
-        ["KODE", "NAMA", "SALDO", "HASIL HITUNGAN", "SELISIH", "KETERANGAN"]);
+    data.add([
+      "KODE",
+      "NAMA",
+      "SALDO",
+      "HASIL HITUNGAN",
+      "SELISIH",
+      "KETERANGAN",
+      "HISTORI"
+    ]);
 
     /// memasukkan data item ke dalam list
     List<ItemCount> combine = await Db().getItemCounts(widget.idSesi!);
     for (var i in combine) {
+      List<Histori> hist = await Db().getHistori(i.id!);
+      List<String> histcombine = [];
+      for (var h in hist) {
+        String txt = h.jumlah.toString() + " " + h.satuan!;
+        histcombine.add(txt);
+      }
       data.add([
         i.kodeItem!,
         i.namaItem!,
@@ -101,6 +115,7 @@ class _StockCountPageState extends State<StockCountPage> {
         i.hitung.toString(),
         i.selisih.toString(),
         i.keterangan ?? '-',
+        ...histcombine
       ]);
     }
 

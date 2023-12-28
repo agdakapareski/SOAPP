@@ -26,8 +26,11 @@ class _TabScreenState extends State<TabScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
+        // color: Colors.white,
         elevation: 10,
+        surfaceTintColor: Colors.white,
         child: Container(
+          // color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 28),
           height: 60,
           child: Row(

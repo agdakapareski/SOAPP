@@ -497,13 +497,13 @@ class _StockCountPageState extends State<StockCountPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                ' - Saldo: ${item.saldoItem}',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 13,
-                ),
-              ),
+              // Text(
+              //   ' - Saldo: ${item.saldoItem}',
+              //   style: TextStyle(
+              //     color: Colors.grey[600],
+              //     fontSize: 13,
+              //   ),
+              // ),
             ],
           ),
           subtitle: flag == 1
@@ -534,7 +534,7 @@ class _StockCountPageState extends State<StockCountPage> {
                     Text('keterangan: ${item.keterangan}'),
                   ],
                 ),
-          trailing: Text('${item.hitung} (${item.selisih})'),
+          // trailing: Text('${item.hitung} (${item.selisih})'),
         ),
         const SizedBox(
           height: 5,

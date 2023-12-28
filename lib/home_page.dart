@@ -112,7 +112,10 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(
           judulApp,
-          style: const TextStyle(fontWeight: FontWeight.w900),
+          style: const TextStyle(
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+          ),
         ),
         elevation: 0,
         backgroundColor: warnaUtama,
@@ -160,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                           tileColor: Colors.white,
                           title: Text(item.kodeItem.toString()),
                           subtitle: Text(item.namaItem!),
-                          trailing: Text(item.saldoItem.toString()),
+                          // trailing: Text(item.saldoItem.toString()),
                         ),
                         const SizedBox(
                           height: 5,

@@ -246,16 +246,16 @@ class _DetailCountPageState extends State<DetailCountPage> {
               Text('${widget.unit!}'),
             ],
           ),
-          const SizedBox(
-            height: 5,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Saldo :'),
-              Text('${widget.saldoItem!}'),
-            ],
-          ),
+          // const SizedBox(
+          //   height: 5,
+          // ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     const Text('Saldo :'),
+          //     Text('${widget.saldoItem!}'),
+          //   ],
+          // ),
           const SizedBox(
             height: 15,
           ),
@@ -282,22 +282,22 @@ class _DetailCountPageState extends State<DetailCountPage> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 5,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Selisih :',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '$selisih',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+          // const SizedBox(
+          //   height: 5,
+          // ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     const Text(
+          //       'Selisih :',
+          //       style: TextStyle(fontWeight: FontWeight.bold),
+          //     ),
+          //     Text(
+          //       '$selisih',
+          //       style: const TextStyle(fontWeight: FontWeight.bold),
+          //     ),
+          //   ],
+          // ),
           const SizedBox(
             height: 15,
           ),
